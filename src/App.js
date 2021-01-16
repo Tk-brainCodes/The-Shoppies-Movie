@@ -4,7 +4,7 @@ import './App.css';
 import MovieList from './components/MovieList';
 import MovieListHeading from './components/MovieListHeading';
 import SearchBox from './components/SearchBox';
-import AddFavourites from './components/AddFavourites';
+import AddFavourites from './components/AddFavourite';
 import RemoveFavourites from './components/RemoveFavourites';
 
 const App = () => {
@@ -13,7 +13,8 @@ const App = () => {
 	const [searchValue, setSearchValue] = useState('');
 
 	const getMovieRequest = async (searchValue) => {
-		const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=263d22d8`;
+		const API_KEY = "b57e0c63";
+		const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=${API_KEY}`;
 
 		const response = await fetch(url);
 		const responseJson = await response.json();
@@ -27,6 +28,7 @@ const App = () => {
 		getMovieRequest(searchValue);
 	}, [searchValue]);
 
+	//fetch items
 	useEffect(() => {
 		const movieFavourites = JSON.parse(
 			localStorage.getItem('react-movie-app-favourites')
@@ -41,12 +43,14 @@ const App = () => {
 		localStorage.setItem('react-movie-app-favourites', JSON.stringify(items));
 	};
 
+	//add to norminee
 	const addFavouriteMovie = (movie) => {
 		const newFavouriteList = [...favourites, movie];
 		setFavourites(newFavouriteList);
 		saveToLocalStorage(newFavouriteList);
 	};
 
+	//remove from norminee
 	const removeFavouriteMovie = (movie) => {
 		const newFavouriteList = favourites.filter(
 			(favourite) => favourite.imdbID !== movie.imdbID
@@ -56,10 +60,11 @@ const App = () => {
 		saveToLocalStorage(newFavouriteList);
 	};
 
+	console.log(favourites.length, "LENGTH!!!!");
 	return (
 		<div className='container-fluid movie-app'>
 			<div className='row d-flex align-items-center mt-4 mb-4'>
-				<MovieListHeading heading='Movies' />
+				<MovieListHeading className="header" heading='The Shoppies' />
 				<SearchBox searchValue={searchValue} setSearchValue={setSearchValue} />
 			</div>
 			<div className='row'>
@@ -70,15 +75,20 @@ const App = () => {
 				/>
 			</div>
 			<div className='row d-flex align-items-center mt-4 mb-4'>
-				<MovieListHeading heading='Favourites' />
+				{favourites.length === 5 ? <h1 className="norminated">You have 5 Norminations ✔</h1> : null}
+				{favourites.length === 0 ? <h1 className="norminated">No Norminations</h1> : null}
+				<MovieListHeading className="header" heading='Norminations ☆☆☆' />
 			</div>
-			<div className='row'>
-				<MovieList
-					movies={favourites}
-					handleFavouritesClick={removeFavouriteMovie}
-					favouriteComponent={RemoveFavourites}
-				/>
-			</div>
+			{favourites.length > 5 ? <h1 className="norminated">Cannot be more than 5 Normi</h1> : null}
+			{favourites ? (
+				<div className='row'>
+					<MovieList
+						movies={favourites}
+						handleFavouritesClick={removeFavouriteMovie}
+						favouriteComponent={RemoveFavourites}
+					/>
+				</div>
+			) : null}
 		</div>
 	);
 };

@@ -1,7 +1,10 @@
+
 body {
 	background: #141414;
-	color: #ffffff;
+	color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 
 .movie-app > .row {
 	overflow-x: auto;
@@ -33,3 +36,16 @@ body {
 	padding: 20px;
 	text-align: center;
 }
+
+.norminated {
+	 padding: 20px;
+	 background: #80b855;
+	 border-radius: 10px ;
+	 font-size: 20px;
+	 margin: 10px;
+}
+
+.heading {
+	color: #F9DE7F;
+}
+
